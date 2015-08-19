@@ -2,6 +2,11 @@
 
 [PostCSS](https://github.com/postcss/postcss) plugin to search for regexp in decls
 
+##Purpose
+This plugin was initially created to analyse css compiled by stylus and find unresolved variables.
+
+When stylus can't resolve variable, it inserts string with its name and doesn't throw any warning.
+To avoid such surprises we developed this warning plugin.
 ## Usage
 This plugin writes all warnings to postcss `result.messages`. You'll need some tool
 to handle them. You can process them manually, or use some plugin for output. for example, postcss-reporter.
@@ -29,7 +34,7 @@ var output = postcss()
 ### Options
 
 #### `regexp` (required)
-Type: `String`  
+Type: `String` or `RegExp`
 
 Regexp to match
 
