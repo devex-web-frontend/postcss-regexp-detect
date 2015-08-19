@@ -1,0 +1,28 @@
+{
+  "name": "postcss-regexp",
+  "version": "0.0.0",
+  "description": "PostCSS plugin to search for regexp and output a warning",
+  "keywords": [
+    "css",
+    "postcss",
+    "postcss-plugins"
+  ],
+  "author": "Devexperts",
+  "license": "MIT",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "index.js"
+  ],
+  "dependencies": {
+    "chalk": "^1.1.0",
+    "postcss": "^4.1.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "postcss-reporter": "^0.4.0"
+  },
+  "scripts": {
+    "test": "mocha test"
+  }
+}
