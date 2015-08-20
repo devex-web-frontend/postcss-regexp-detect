@@ -22,7 +22,10 @@ var css = fs.readFileSync("input.css", "utf8")
 
 // process css
 var output = postcss()
-  .use(regexp)
+  .use(regexp({
+      regexp: new RegExp('.+px'),
+      messagePattern: 'Pixel value %s found on line %l'
+  }))
   .use(reporter)
   .process(css, {
     from: "src/stylesheet/index.css"
@@ -38,10 +41,13 @@ Type: `String` or `RegExp`
 
 Regexp to match
 
-#### `message` (optional)
+#### `messagePattern` (optional)
 Type: `String`
-Default: `Regexp matched with`
+Default: `Regexp matched with %s on line %l`
 
-Message text. For expample you'll get 'Regexp matched with _$variable_ on line 134'
+Pattern for message text.
+* %s is for matched strings
+* %l is for line number
+
 
 ## [License](LICENSE)

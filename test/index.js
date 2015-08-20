@@ -3,8 +3,10 @@ var chalk = require('chalk')
 var regexpPlugin = require('..');
 var fs = require('fs');
 var postcss = require('postcss');
-
+var reporter = require('postcss-reporter')
 var source = fs.readFileSync('test/fixtures/test.css', 'utf8').trim();
+
+var defaultRegexp = new RegExp('^\\$.*');
 
 function composeMessage(text) {
 	return {
@@ -22,12 +24,13 @@ function assertMessages(messages, expected) {
 		assert.equal(message.text, expected[index].text);
 	})
 }
-function exec(expected, regexp, message) {
+function exec(expected, regexp, messagePattern) {
 	return postcss()
 		.use(regexpPlugin({
-			message: message,
+			messagePattern: messagePattern,
 			regexp: regexp
 		}))
+		.use(reporter)
 		.process(source)
 		.then(function(result) {
 			assertMessages(result.messages, expected)
@@ -37,8 +40,7 @@ function exec(expected, regexp, message) {
 describe('matching: ', function() {
 	it('Should warn if regexp matched once', function() {
 		var expected = [composeMessage('Regexp matched with $var on line 4')];
-		var regexp = new RegExp('^\\$.*');
-		return exec(expected, regexp);
+		return exec(expected, defaultRegexp);
 	});
 	it('Should warn if regexp matched multiple times', function() {
 		var expected = [
@@ -58,18 +60,16 @@ describe('options: ', function() {
 			plugin: 'postcss-regexp',
 			text: 'No regexp provided'
 		}];
-		return exec(expected);
+		return exec(expected, null);
 	});
 
 	it('Should use standard message \'Regexp matched with\' by default', function() {
 		var expected = [composeMessage('Regexp matched with $var on line 4')];
-		var regexp = new RegExp('^\\$.*');
-		return exec(expected, regexp);
+		return exec(expected, defaultRegexp);
 	});
 
-	it('Should use custom message if provided', function() {
-		var expected = [composeMessage('Hello $var on line 4')];
-		var regexp = new RegExp('^\\$.*');
-		return exec(expected, regexp, 'Hello');
+	it('Should use custom message pattern if provided', function() {
+		var expected = [composeMessage('Hello $var line 4')];
+		return exec(expected, defaultRegexp, 'Hello %s line %l');
 	});
 });

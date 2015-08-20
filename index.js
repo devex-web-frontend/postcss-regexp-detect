@@ -2,39 +2,42 @@ var fs = require('fs');
 var path = require('path');
 var postcss = require('postcss');
 
-var messageText = 'Regexp matched with';
-var regexp;
+var defaultPattern = 'Regexp matched with %s on line %l';
+var logger;
 
-module.exports = postcss.plugin('postcss-regexp', function(options, t) {
+module.exports = postcss.plugin('postcss-regexp', function(options) {
 	return function(css, result) {
+		logger = result;
 		if (!options.regexp) {
-			throwOptionsError(result);
+			throwOptionsError();
 			return;
 		}
-		messageText = options.message ? options.message : messageText;
-		regexp = options.regexp;
 
 		css.eachDecl(function(decl) {
 			if (decl.value) {
-				processDecl(decl, result);
+				processDecl(decl, options);
 			}
 		})
 	}
 });
-function throwOptionsError(result){
-	result.messages.push({
+
+function throwOptionsError(){
+	logger.messages.push({
 		type: 'error',
 		plugin: 'postcss-regexp',
 		text: 'No regexp provided'
 	});
 }
 
-function processDecl(decl, result) {
+function processDecl(decl, rule) {
 	var value = decl.value;
+		if (value.search(rule.regexp) === 0) {
+			var pattern = rule.messagePattern || defaultPattern;
+			var message = pattern
+				.replace('%s', value)
+				.replace('%l', decl.source.start.line);
+			logger.warn(message);
+		}
 
-	if (value.search(regexp) === 0) {
-		var message = messageText + ' ' + value
-			+ ' on line ' + decl.source.start.line;
-		result.warn(message);
-	}
+
 }
