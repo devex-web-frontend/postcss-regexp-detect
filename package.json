@@ -1,10 +1,13 @@
 {
-  "name": "postcss-regexp",
+  "name": "postcss-regexp-detect",
   "version": "0.0.0",
   "description": "PostCSS plugin to search for regexp and output a warning",
   "keywords": [
     "css",
     "postcss",
+    "regexp",
+    "search",
+    "warn",
     "postcss-plugins"
   ],
   "author": "Devexperts",
