@@ -3,11 +3,11 @@ var path = require('path');
 var postcss = require('postcss');
 
 var defaultPattern = 'Regexp matched with %s on line %l';
-var logger;
+var postcssResult;
 
 module.exports = postcss.plugin('postcss-regexp', function(options) {
 	return function(css, result) {
-		logger = result;
+		postcssResult = result;
 		if (!options.regexp) {
 			throwOptionsError();
 			return;
@@ -22,7 +22,7 @@ module.exports = postcss.plugin('postcss-regexp', function(options) {
 });
 
 function throwOptionsError(){
-	logger.messages.push({
+	postcssResult.messages.push({
 		type: 'error',
 		plugin: 'postcss-regexp',
 		text: 'No regexp provided'
@@ -36,7 +36,7 @@ function processDecl(decl, rule) {
 			var message = pattern
 				.replace('%s', value)
 				.replace('%l', decl.source.start.line);
-			logger.warn(message);
+			postcssResult.warn(message);
 		}
 
 
