@@ -1,11 +1,11 @@
-# postcss-regexp
+# postcss-regexp-detect
 
-[PostCSS](https://github.com/postcss/postcss) plugin to search for regexp in decls
+[PostCSS](https://github.com/postcss/postcss) plugin to search for regexp in rule declaraions
 
 ##Purpose
 This plugin was initially created to analyse css compiled by stylus and find unresolved variables.
 
-When stylus can't resolve variable, it inserts string with its name and doesn't throw any warning.
+When stylus can't resolve a variable, it inserts string with its name and doesn't throw any warning.
 To avoid such surprises we developed this warning plugin.
 ## Usage
 This plugin writes all warnings to postcss `result.messages`. You'll need some tool
