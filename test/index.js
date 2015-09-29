@@ -24,14 +24,14 @@ function assertMessages(messages, expected) {
 		assert.equal(message.text, expected[index].text);
 	})
 }
-function exec(expected, regexp, messagePattern) {
+function exec(expected, regexp, messagePattern, psParams) {
 	return postcss()
 		.use(regexpPlugin({
 			messagePattern: messagePattern,
 			regexp: regexp
 		}))
 		.use(reporter)
-		.process(source)
+		.process(source, psParams || {from: 'src.css'})
 		.then(function(result) {
 			assertMessages(result.messages, expected)
 		});
@@ -69,7 +69,12 @@ describe('options: ', function() {
 	});
 
 	it('Should use custom message pattern if provided', function() {
-		var expected = [composeMessage('Hello $var line 4')];
-		return exec(expected, defaultRegexp, 'Hello %s line %l');
+		var expected = [composeMessage('Hello $var line 4 file src.css')];
+		return exec(expected, defaultRegexp, 'Hello %s line %l file %f');
+	});
+
+	it('Should insert standart phrase if $f pattern is provided and from is not specified', function() {
+		var expected = [composeMessage('Hello $var line 4 file [source file not specified]')];
+		return exec(expected, defaultRegexp, 'Hello %s line %l file %f', {from: null});
 	});
 });

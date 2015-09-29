@@ -8,6 +8,7 @@ var postcssResult;
 module.exports = postcss.plugin('postcss-regexp', function(options) {
 	return function(css, result) {
 		postcssResult = result;
+
 		if (!options.regexp) {
 			throwOptionsError();
 			return;
@@ -33,9 +34,11 @@ function processDecl(decl, rule) {
 	var value = decl.value;
 		if (value.search(rule.regexp) === 0) {
 			var pattern = rule.messagePattern || defaultPattern;
+			var from = postcssResult.opts.from || '[source file not specified]';
 			var message = pattern
 				.replace('%s', value)
-				.replace('%l', decl.source.start.line);
+				.replace('%l', decl.source.start.line)
+				.replace('%f', from);
 			postcssResult.warn(message);
 		}
 

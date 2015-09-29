@@ -48,6 +48,7 @@ Default: `Regexp matched with %s on line %l`
 Pattern for message text.
 * %s is for matched strings
 * %l is for line number
+* %f is for postcss from parameter
 
 
 ## [License](LICENSE)
