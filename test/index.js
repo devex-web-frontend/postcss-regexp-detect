@@ -47,7 +47,7 @@ describe('matching: ', function() {
 			composeMessage('Regexp matched with 10px on line 2'),
 			composeMessage('Regexp matched with 30px on line 3')
 		];
-		var regexp = new RegExp('^\\d.*');
+		var regexp = new RegExp('px');
 		return exec(expected, regexp);
 	});
 });

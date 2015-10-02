@@ -32,7 +32,7 @@ function throwOptionsError(){
 
 function processDecl(decl, rule) {
 	var value = decl.value;
-		if (value.search(rule.regexp) === 0) {
+		if (value.search(rule.regexp) !== -1) {
 			var pattern = rule.messagePattern || defaultPattern;
 			var from = postcssResult.opts.from || '[source file not specified]';
 			var message = pattern
