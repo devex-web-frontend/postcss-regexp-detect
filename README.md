@@ -7,6 +7,13 @@ This plugin was initially created to analyse css compiled by stylus and find unr
 
 When stylus can't resolve a variable, it inserts string with its name and doesn't throw any warning.
 To avoid such surprises we developed this warning plugin.
+
+## Installation
+
+```console
+$ npm install postcss-regexp-detect
+```
+
 ## Usage
 This plugin writes all warnings to postcss `result.messages`. You'll need some tool
 to handle them. You can process them manually, or use some plugin for output. for example, postcss-reporter.
